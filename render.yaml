@@ -1,0 +1,24 @@
+# Render Blueprint for Market Masters.
+# The persistent disk is required: SQLite stores all active game state there.
+services:
+  - type: web
+    name: market-masters
+    runtime: node
+    plan: starter
+    buildCommand: npm ci && npm run build
+    startCommand: npm start
+    healthCheckPath: /api/health
+    autoDeploy: true
+    disk:
+      name: market-masters-data
+      mountPath: /data
+      sizeGB: 1
+    envVars:
+      - key: NODE_VERSION
+        value: 22.22.1
+      - key: NODE_ENV
+        value: production
+      - key: DB_FILE
+        value: /data/market-masters.db
+      - key: TRUST_PROXY
+        value: "1"
